@@ -1,1 +1,0 @@
-# presentaci-n-proyecto-enegria-geotermica
