@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ACV de una central geotérmica en la SNSM</title>
+<style>
+:root{--bg:#fbf7f1;--fg:#2a211b;--mut:#6f6258;--card:#fff;--line:#e4d9cc;--acc:#d9622b;--acc2:#1f8a70;--blue:#2f6fa8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17120f;--fg:#f3ebe2;--mut:#b3a597;--card:#241c17;--line:#3b2f27;--acc:#f08a52;--acc2:#4cc3a3;--blue:#6aa8e0}}
+:root[data-theme="dark"]{--bg:#17120f;--fg:#f3ebe2;--mut:#b3a597;--card:#241c17;--line:#3b2f27;--acc:#f08a52;--acc2:#4cc3a3;--blue:#6aa8e0}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:radial-gradient(circle at 90% -10%,color-mix(in srgb,var(--acc) 25%,transparent),transparent 45%),radial-gradient(circle at 0% 110%,color-mix(in srgb,var(--acc2) 22%,transparent),transparent 45%),var(--bg);color:var(--fg);font-family:Georgia,"Times New Roman",serif;overflow:hidden}
+h1{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+h1,h2,h3,.sans{font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+#bar{position:fixed;top:env(safe-area-inset-top,0px);left:0;height:4px;background:var(--acc);transition:width .5s;z-index:5}
+.s{position:absolute;inset:0;padding:28px 6vw 76px;overflow-y:auto;opacity:0;transform:translateX(60px);pointer-events:none;transition:opacity .5s,transform .5s}
+.s.on{opacity:1;transform:none;pointer-events:auto}.s.out{transform:translateX(-60px)}
+.in{max-width:1000px;margin:0 auto}
+h1{font-size:clamp(28px,5.5vw,56px);line-height:1.1;margin:.2em 0}
+h2{font-size:clamp(22px,3.6vw,36px);margin:0 0 .5em;color:var(--acc)}
+h3{margin:.2em 0;font-size:18px}
+p{line-height:1.55;font-size:clamp(15px,2vw,19px);margin:.4em 0}
+.mut{color:var(--mut)}.tag{display:inline-block;font:600 12px system-ui;letter-spacing:.1em;text-transform:uppercase;color:var(--acc2)}
+.g{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.s .a{opacity:0;transform:translateY(18px)}
+.s.on .a{animation:up .6s forwards;animation-delay:calc(var(--i,0)*.12s + .2s)}
+@keyframes up{to{opacity:1;transform:none}}
+.stages{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.st{flex:1 1 90px;border:2px solid var(--line);background:var(--card);color:var(--fg);border-radius:12px;padding:12px 6px;font:600 14px system-ui;cursor:pointer;transition:.25s}
+.st.act{border-color:var(--acc);background:var(--acc);color:#fff;transform:translateY(-4px)}
+#det{min-height:90px;border-left:4px solid var(--acc);padding-left:14px;transition:opacity .3s}
+.in-ex{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.in-ex .c.y{border-top:5px solid var(--acc2)}.in-ex .c.n{border-top:5px solid var(--acc)}
+.chip{display:inline-block;margin:4px 4px 0 0;padding:6px 10px;border-radius:99px;font:14px system-ui;background:var(--bg);border:1px solid var(--line)}
+.big{font:700 clamp(30px,6vw,52px) system-ui;color:var(--acc2)}
+.rail{height:16px;background:var(--line);border-radius:9px;position:relative;margin:10px 0 4px}
+.rng{position:absolute;top:0;bottom:0;left:30%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--acc2),var(--acc))}
+.s.on .rng{animation:gr 1.4s .6s forwards}@keyframes gr{to{width:46%}}
+svg text{font-family:system-ui,sans-serif;fill:var(--fg)}
+.flow{stroke-dasharray:8 8;animation:fl 1s linear infinite}@keyframes fl{to{stroke-dashoffset:-16}}
+.spin{transform-origin:350px 120px;animation:sp 3s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.hot{stroke:var(--acc)}.cold{stroke:var(--blue)}
+#nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;align-items:center;gap:14px;padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--bg) 40%);z-index:5}
+#nav button{font:600 15px system-ui;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:99px;padding:9px 18px}
+#cnt{font:14px system-ui;color:var(--mut);min-width:52px;text-align:center}
+.pulse{animation:pl 2.4s ease-in-out infinite}@keyframes pl{50%{transform:scale(1.04)}}
+.tlbar{position:relative;display:flex;height:14px;border-radius:8px;margin:18px 0 14px}.tlbar i{display:block}.tlbar i:first-child{border-radius:8px 0 0 8px}.tlbar i:nth-child(3){border-radius:0 8px 8px 0}.tlbar b{position:absolute;top:-5px;bottom:-5px;width:5px;margin-left:-2px;background:var(--fg);border-radius:3px;transition:left .2s}
+input[type=range]{width:100%;accent-color:var(--acc)}.sea{fill:var(--blue);opacity:.2}.wv{stroke:var(--blue);fill:none;opacity:.5;animation:wv 3s ease-in-out infinite}@keyframes wv{50%{transform:translateX(10px)}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important}}
+</style></head><body>
+<div id="bar"></div>
+
+<section class="s"><div class="in" style="padding-top:6vh">
+<span class="tag a">Quiz 3 · Variante 11 · Energía geotérmica en el Caribe colombiano</span>
+<h1 class="a" style="--i:1">Análisis de ciclo de vida de una central geotérmica en la Sierra Nevada de Santa Marta</h1>
+<p class="a mut" style="--i:2">Jaime Andrés Gnecco Daza y Jesús Daniel Barraza Pérez<br>Programa de Ingeniería Energética, Universidad del Magdalena</p>
+<svg class="a" style="--i:3;width:100%;max-height:200px" viewBox="0 0 700 160" aria-hidden="true"><path d="M0 150 L120 70 L190 110 L300 20 L400 100 L470 60 L600 130 L700 90 L700 160 L0 160Z" fill="var(--line)"/><path d="M300 20 L335 48 L315 52 L300 40 L285 54 L268 46Z" fill="var(--bg)"/><circle cx="560" cy="40" r="16" fill="var(--acc)" class="pulse"/></svg>
+<p class="a mut sans" style="--i:4">Pulsa → o desliza para avanzar</p></div></section>
+
+<section class="s"><div class="in">
+<h2 class="a">Contexto del proyecto</h2>
+<div class="g">
+<div class="c a" style="--i:1"><h3>📍 Ubicación</h3><p>Flanco norte y estribaciones medias de la SNSM, en el Magdalena. El sector presenta anomalías térmicas ligadas a sistemas hidrotermales profundos y al fracturamiento tectónico del macizo (Alfaro et al., 2020).</p></div>
+<div class="c a" style="--i:2"><h3>⚡ Relevancia en el Caribe</h3><p>La región depende de térmicas a gas y carbón para dar firmeza cuando bajan los aportes hídricos, sobre todo con El Niño. Una central de ciclo binario ofrece generación continua con factores de planta altos y diversifica la matriz (MinEnergía &amp; BID, 2021).</p></div>
+<div class="c a" style="--i:3"><h3>🔎 Enfoque ISO 14040</h3><p>De la cuna a la tumba.<br><b>Unidad funcional:</b> 1 MWh neto entregado al SIN, con vida útil de 30 años.</p></div>
+</div></div></section>
+
+<section class="s"><div class="in">
+<h2 class="a">Etapas del ciclo de vida</h2>
+<p class="mut a" style="--i:1">Toca una etapa o pulsa Auto para recorrerlas con su escena animada.</p>
+<div class="stages a" style="--i:2" id="st"></div>
+<div class="c a" style="--i:3;padding:8px"><svg id="sc" viewBox="0 0 700 220" style="width:100%;height:auto;display:block" role="img" aria-label="Escena de la etapa"></svg></div>
+<div id="det" class="a" style="--i:4;margin-top:12px"><p></p></div>
+<div id="chips"></div>
+<div class="a" style="--i:5;display:flex;gap:8px;align-items:center;margin-top:12px"><button class="st" style="flex:0 0 auto;padding:9px 12px" onclick="stage((cur+4)%5,1)">◀ Etapa</button><div class="rail" style="flex:1;margin:0"><div id="pg" style="height:100%;border-radius:9px;background:var(--acc);width:20%;transition:width .5s"></div></div><button class="st" style="flex:0 0 auto;padding:9px 12px" onclick="stage((cur+1)%5,1)">Etapa ▶</button><button class="st" id="ap" style="flex:0 0 auto;padding:9px 12px" onclick="auto()">▶ Auto</button></div>
+<svg class="a" style="--i:4;width:100%;height:30px" viewBox="0 0 700 30" aria-hidden="true"><line x1="0" y1="15" x2="700" y2="15" class="flow hot" stroke-width="3"/></svg>
+</div></section>
+
+<section class="s"><div class="in">
+<h2 class="a">Vista en planta: del puerto al piedemonte</h2>
+<svg class="a" style="--i:1;width:100%;height:auto" viewBox="0 0 700 300" role="img" aria-label="Mapa esquemático de la ruta de equipos">
+<rect class="sea" width="700" height="300"/>
+<path class="wv" d="M20 100 q15 -10 30 0 t30 0"/><path class="wv" d="M40 170 q15 -10 30 0 t30 0"/><path class="wv" d="M110 40 q15 -10 30 0 t30 0"/>
+<path d="M120 300 L170 200 L215 165 L330 120 L460 60 L700 20 V300Z" fill="var(--card)" stroke="var(--line)" stroke-width="3"/>
+<path d="M500 150 L580 60 L620 100 L670 30 L700 70 V150Z" fill="var(--line)"/><path d="M580 60 l14 14 l-10 3 l-6 -8 l-8 8z M670 30 l12 14 l-12 3 l-10 -4z" fill="var(--bg)"/>
+<ellipse cx="620" cy="95" rx="82" ry="58" fill="none" stroke="var(--acc)" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="620" y="172" text-anchor="middle" font-size="11">Sitios sagrados / Línea Negra: exclusión</text>
+<path d="M30 40 C90 40 130 140 195 182" class="cold flow" fill="none" stroke-width="3"/>
+<path d="M195 182 C270 230 360 160 430 200" class="hot flow" fill="none" stroke-width="3"/>
+<text font-size="22">🚢<animateMotion dur="5s" repeatCount="indefinite" path="M30 40 C90 40 130 140 195 182"/></text>
+<text font-size="22">🚚<animateMotion dur="6s" repeatCount="indefinite" path="M195 182 C270 230 360 160 430 200"/></text>
+<circle cx="195" cy="182" r="7" fill="var(--blue)"/><text x="150" y="212" font-size="12" text-anchor="end">Puerto de Santa Marta</text>
+<circle cx="430" cy="200" r="10" fill="var(--acc2)" class="pulse" style="transform-origin:430px 200px"/><text x="430" y="232" font-size="12" text-anchor="middle">Central (piedemonte)</text>
+<text x="20" y="288" font-size="11">Esquema sin escala</text>
+</svg>
+<p class="a mut" style="--i:2">Equipos por mar hasta Santa Marta y carga pesada por tierra al piedemonte, usando vías preexistentes y evitando zonas de exclusión cultural.</p>
+</div></section>
+
+<section class="s"><div class="in">
+<h2 class="a">Plano de la central (ciclo binario)</h2>
+<svg class="a" style="--i:1;width:100%;height:auto" viewBox="0 0 700 330" role="img" aria-label="Esquema de central geotérmica binaria">
+<rect x="0" y="150" width="700" height="180" fill="var(--line)" opacity=".55"/>
+<rect x="0" y="290" width="700" height="40" fill="var(--acc)" opacity=".25"/>
+<text x="350" y="316" text-anchor="middle" font-size="13">Yacimiento geotérmico (2.000–3.500 m)</text>
+<path d="M90 290 V150 H220" fill="none" class="hot flow" stroke-width="5"/>
+<path d="M610 150 V290" fill="none" class="cold flow" stroke-width="5"/>
+<text x="90" y="215" font-size="12" dx="-8" text-anchor="end">Pozo productor</text>
+<text x="610" y="215" font-size="12" dx="8">Pozo de reinyección</text>
+<rect x="220" y="110" width="90" height="80" rx="10" fill="var(--card)" stroke="var(--acc)" stroke-width="2"/>
+<text x="265" y="145" text-anchor="middle" font-size="12">Intercam-</text><text x="265" y="161" text-anchor="middle" font-size="12">biador</text>
+<path d="M310 125 H350" class="hot flow" stroke-width="3" fill="none"/>
+<circle cx="350" cy="120" r="34" fill="var(--card)" stroke="var(--acc2)" stroke-width="2"/>
+<g class="spin"><path d="M350 92 V148 M322 120 H378 M330 100 L370 140 M370 100 L330 140" stroke="var(--acc2)" stroke-width="3"/></g>
+<text x="350" y="72" text-anchor="middle" font-size="12">Turbina ORC</text>
+<rect x="395" y="100" width="46" height="40" rx="8" fill="var(--card)" stroke="var(--blue)" stroke-width="2"/><text x="418" y="125" text-anchor="middle" font-size="18">⚡</text>
+<text x="418" y="92" text-anchor="middle" font-size="12">Generador</text>
+<rect x="500" y="100" width="90" height="80" rx="10" fill="var(--card)" stroke="var(--blue)" stroke-width="2"/>
+<text x="545" y="145" text-anchor="middle" font-size="12">Enfriamiento</text>
+<path d="M441 120 H500" class="cold flow" stroke-width="3" fill="none"/>
+<path d="M590 150 H610" class="cold flow" stroke-width="3" fill="none"/>
+<path d="M418 100 V50 H660" fill="none" stroke="var(--acc2)" stroke-width="3" class="flow"/>
+<text x="660" y="40" text-anchor="end" font-size="12">Línea al SIN</text>
+</svg>
+<p class="a mut" style="--i:2">Circuito cerrado: el fluido geotérmico cede calor y se reinyecta en su totalidad, sin liberar gases no condensables al aire.</p>
+</div></section>
+
+<section class="s"><div class="in">
+<h2 class="a">Corte del terreno: cómo se perforaría</h2>
+<div class="stages a" style="--i:1"><button class="st act" id="b0" onclick="pad(0)">Convencional</button><button class="st" id="b1" onclick="pad(1)">Propuesta: 1 plataforma</button></div>
+<svg class="a" style="--i:2;width:100%;height:auto" viewBox="0 0 700 300" role="img" aria-label="Corte con pozos">
+<rect y="70" width="700" height="230" fill="var(--line)" opacity=".55"/><rect y="240" width="700" height="60" fill="var(--acc)" opacity=".28"/>
+<text x="350" y="280" text-anchor="middle" font-size="12">Yacimiento</text>
+<text x="10" y="50" font-size="18">🌳🌳🌳</text><text x="590" y="50" font-size="18">🌳🌳🌳</text>
+<g id="v1"><path d="M0 66 H580" stroke="var(--acc)" stroke-width="4" stroke-dasharray="10 6" fill="none"/>
+<rect x="95" y="60" width="50" height="10" fill="var(--acc)"/><rect x="325" y="60" width="50" height="10" fill="var(--acc)"/><rect x="555" y="60" width="50" height="10" fill="var(--acc)"/>
+<path d="M120 70 V245 M350 70 V245 M580 70 V245" class="hot flow" stroke-width="4" fill="none"/><text x="350" y="28" text-anchor="middle" font-size="13">3 plataformas + vías largas</text></g>
+<g id="v2" style="display:none"><path d="M0 66 H350" stroke="var(--acc)" stroke-width="4" stroke-dasharray="10 6" fill="none"/><rect x="325" y="60" width="50" height="10" fill="var(--acc)"/>
+<path d="M350 70 V125 Q350 215 120 245 M350 70 V245 M350 70 V125 Q350 215 580 245" class="hot flow" stroke-width="4" fill="none"/><text x="350" y="28" text-anchor="middle" font-size="13">1 plataforma + vía corta</text></g>
+</svg>
+<p id="pt" class="a" style="--i:3"></p>
+</div></section>
+
+<section class="s"><div class="in">
+<h2 class="a">Límites del sistema</h2>
+<div class="in-ex">
+<div class="c y a" style="--i:1"><h3>✅ Se incluye</h3>
+<span class="chip">Diésel y lodos de perforación</span><span class="chip">Acero, concreto, fluido orgánico</span><span class="chip">Transporte de equipos principales</span><span class="chip">Mantenimiento y fugas menores</span><span class="chip">Sellado de pozos y desmantelamiento</span></div>
+<div class="c n a" style="--i:2"><h3>🚫 Se excluye</h3>
+<span class="chip">Vías y puertos preexistentes</span><span class="chip">Red troncal más allá del enlace</span><span class="chip">Fabricación de vehículos y maquinaria general</span><span class="chip">Labores administrativas</span></div>
+</div></div></section>
+
+<section class="s"><div class="in">
+<h2 class="a">Indicadores ambientales y sociales</h2>
+<div class="g">
+<div class="c a" style="--i:1"><h3>🌱 Suelo</h3><div class="big">1,5–3 ha</div><p>por cada 10 MW instalados. El riesgo está en abrir vías en laderas: fragmenta bosque húmedo y favorece la erosión (Frick et al., 2010).</p></div>
+<div class="c a" style="--i:2"><h3>☁️ Gases de efecto invernadero</h3><div class="big">15–38</div><p class="mut" style="margin:0">kg CO₂eq/MWh, sobre todo por diésel y acero de pozos (Tomasini-Montenegro et al., 2017).</p>
+<div class="rail"><div class="rng"></div></div><div class="mut sans" style="font-size:11px;display:flex;justify-content:space-between"><span>0</span><span>50</span></div></div>
+<div class="c a" style="--i:3"><h3>👷 Empleo</h3><div class="big">15–25</div><p>personas en operación (30 años). El pico de empleo local está en los 2–3 primeros años; requiere capacitación previa.</p></div>
+<div class="c a" style="--i:4"><h3>🪶 Comunidades</h3><p>Territorio ancestral Arhuaco, Kogui, Wiwa y Kankuamo; Línea Negra. Exige <b>Consulta Previa</b> (Convenio 169 OIT), zonas de exclusión cultural y monitoreo comunitario del agua.</p></div>
+</div></div></section>
+
+<section class="s"><div class="in">
+<h2 class="a">Línea de tiempo del proyecto</h2>
+<p class="mut">Desliza para recorrer los años.</p>
+<input type="range" id="yr" min="0" max="34" value="0" oninput="tl(this.value)" aria-label="Año del proyecto">
+<div class="tlbar"><i style="flex:3;background:var(--acc)"></i><i style="flex:30;background:var(--acc2)"></i><i style="flex:1;background:var(--blue)"></i><b id="mk"></b></div>
+<div class="c"><h3 id="tt"></h3><p id="tp"></p></div>
+<div class="rail"><div id="lv" style="height:100%;border-radius:9px;background:var(--acc);transition:.4s"></div></div><span class="mut sans" style="font-size:12px">Demanda relativa de empleo local</span>
+</div></section>
+
+<section class="s"><div class="in">
+<h2 class="a">Conclusión y reflexión crítica</h2>
+<div class="g">
+<div class="c a" style="--i:1"><h3>Sostenibilidad</h3><p>Aporta energía firme sin depender de lluvias ni quemar fósiles. Pero en la SNSM es condicionada: solo en piedemonte ya intervenido, fuera de áreas protegidas y sitios sagrados, y con acuerdos claros con las comunidades.</p></div>
+<div class="c a" style="--i:2"><h3>Aspectos por mejorar</h3><p>① Perforación direccional múltiple desde una misma plataforma.<br>② Taladros eléctricos o híbridos para bajar el diésel.<br>③ Convenios tempranos con el SENA y la Universidad del Magdalena para formar talento local.</p></div>
+</div>
+<p class="mut a sans" style="--i:3;font-size:12px">Referencias: Alfaro et al. (2020), SGC · Frick et al. (2010), Energy 35(5) · ISO 14040:2006 · MinEnergía &amp; BID (2021) · Tomasini-Montenegro et al. (2017), RSER 70.</p>
+<h2 class="a" style="--i:4;margin-top:.6em">¡Gracias! ¿Preguntas?</h2>
+</div></section>
+
+<div id="nav"><button id="pv" aria-label="Anterior">←</button><span id="cnt"></span><button id="nx" aria-label="Siguiente">→</button></div>
+<script>
+var S=[].slice.call(document.querySelectorAll('.s')),n=0;
+function go(i){
+  if(i<0||i>=S.length)return;
+  S.forEach(function(s,k){s.classList.remove('on','out');if(k<i)s.classList.add('out');});
+  S[i].classList.add('on');n=i;
+  document.getElementById('cnt').textContent=(i+1)+' / '+S.length;
+  document.getElementById('bar').style.width=((i+1)/S.length*100)+'%';
+  try{location.hash='s'+(i+1);}catch(e){}
+}
+document.getElementById('nx').onclick=function(){go(n+1)};
+document.getElementById('pv').onclick=function(){go(n-1)};
+document.addEventListener('keydown',function(e){if(e.target.type==='range')return;
+  if(['ArrowRight','PageDown',' '].indexOf(e.key)>-1){e.preventDefault();go(n+1)}
+  if(['ArrowLeft','PageUp'].indexOf(e.key)>-1){e.preventDefault();go(n-1)}
+});
+var x0=null;
+document.addEventListener('touchstart',function(e){x0=e.target.type==='range'?null:e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',function(e){
+  if(x0===null)return;var d=e.changedTouches[0].clientX-x0;x0=null;
+  if(Math.abs(d)>60)go(d<0?n+1:n-1);
+},{passive:true});
+var ST=[
+ ['⛏️ Extracción','Estudios geológicos y geofísicos, accesos, perforación profunda (2.000 a 3.500 m) de pozos productores y de reinyección; acero y cemento de los pozos.'],
+ ['🏭 Fabricación','Intercambiadores de calor, turbinas ORC, equipos de enfriamiento, montaje electromecánico y línea de enlace a la subestación.'],
+ ['🚢 Transporte','Traslado marítimo de equipos hasta el puerto de Santa Marta y carga pesada por tierra hasta el piedemonte.'],
+ ['⚡ Uso','Extracción del fluido, calor a un circuito secundario cerrado, generación, reinyección total y mantenimiento periódico.'],
+ ['♻️ Fin de vida','Retiro de equipos, sellado de pozos con cemento para proteger acuíferos, gestión de chatarra y recuperación del terreno y la vegetación.']
+];
+var box=document.getElementById('st'),det=document.getElementById('det').firstChild;
+ST.forEach(function(t,k){
+  var b=document.createElement('button');b.className='st'+(k===0?' act':'');b.textContent=t[0];
+  b.onclick=function(){
+    [].forEach.call(box.children,function(c){c.classList.remove('act')});b.classList.add('act');
+    det.textContent=t[1];
+  };
+  box.appendChild(b);
+});
+det.textContent=ST[0][1];
+function pad(k){document.getElementById('v1').style.display=k?'none':'';document.getElementById('v2').style.display=k?'':'none';document.getElementById('b0').classList.toggle('act',!k);document.getElementById('b1').classList.toggle('act',!!k);document.getElementById('pt').textContent=k?'Perforación direccional múltiple: una sola apertura de vía y menos descapote en la ladera, con el mismo acceso al yacimiento.':'Una plataforma por pozo: más vías, más bosque húmedo intervenido y más riesgo de erosión.';}
+function tl(v){v=+v;var a,b,w;if(v<3){a='Años 0–3 · Exploración, vías y perforación';b='Mayor demanda de empleo local en obras civiles, transporte y servicios.';w=90}else if(v<=33){a='Años 3–33 · Operación';b='Equipo directo pequeño (15 a 25 personas) con perfiles técnicos: sin capacitación previa, los cargos se cubren con personal foráneo.';w=25}else{a='Cierre · Fin de vida';b='Retiro de equipos, sellado permanente de pozos, chatarra y recuperación del terreno y la cobertura vegetal.';w=55}document.getElementById('tt').textContent=a;document.getElementById('tp').textContent=b;document.getElementById('lv').style.width=w+'%';document.getElementById('mk').style.left=(v/34*100)+'%';}
+var cur=0,tm=null;
+var CH=[['🌡️ Mayor aporte de GEI','⛽ Diésel y lodos','🔩 Acero y cemento'],['🔥 Turbinas ORC','♨️ Intercambiadores','🔌 Línea a la subestación'],['🚢 Marítimo','🚚 Carga pesada','🛣️ Vías preexistentes'],['♻️ Reinyección total','🔒 Circuito cerrado','🛠️ Mantenimiento'],['🧱 Sellado con cemento','💧 Protege acuíferos','🌱 Recuperación del terreno']];
+var SC=[
+'<rect y="120" width="700" height="100" fill="var(--line)" opacity=".6"/><text x="40" y="112" font-size="26">🌳</text><text x="600" y="112" font-size="26">🌳</text><rect x="300" y="116" width="100" height="6" fill="var(--acc)"/><path d="M350 116 L318 36 H382Z" fill="none" stroke="var(--fg)" stroke-width="3"/><path d="M334 76 H366" stroke="var(--fg)" stroke-width="3"/><rect x="347" y="122" width="6" height="0" fill="var(--acc)"><animate attributeName="height" from="0" to="92" dur="3s" repeatCount="indefinite"/></rect><text x="400" y="180" font-size="14">2.000–3.500 m de profundidad</text><text x="400" y="70" font-size="13">Plataforma y perforación</text>',
+'<rect x="180" y="70" width="340" height="120" rx="12" fill="var(--card)" stroke="var(--acc)" stroke-width="2"/><g><circle cx="270" cy="125" r="28" fill="none" stroke="var(--acc)" stroke-width="4" stroke-dasharray="10 5"/><path d="M270 100 V150 M245 125 H295" stroke="var(--acc)" stroke-width="3"/><animateTransform attributeName="transform" type="rotate" from="0 270 125" to="360 270 125" dur="3s" repeatCount="indefinite"/></g><g><circle cx="340" cy="125" r="22" fill="none" stroke="var(--acc2)" stroke-width="4" stroke-dasharray="8 4"/><path d="M340 105 V145 M320 125 H360" stroke="var(--acc2)" stroke-width="3"/><animateTransform attributeName="transform" type="rotate" from="360 340 125" to="0 340 125" dur="2.2s" repeatCount="indefinite"/></g><rect x="410" y="95" width="80" height="60" rx="8" fill="none" stroke="var(--blue)" stroke-width="3"/><path d="M420 110 H480 M420 125 H480 M420 140 H480" class="flow cold" stroke-width="3"/><text x="270" y="178" text-anchor="middle" font-size="12">Turbina ORC</text><text x="450" y="178" text-anchor="middle" font-size="12">Intercambiador</text><text x="350" y="56" text-anchor="middle" font-size="13">Montaje electromecánico</text>',
+'<rect class="sea" width="350" height="220"/><rect x="350" y="150" width="350" height="70" fill="var(--line)" opacity=".6"/><path d="M0 130 H350" class="cold flow" stroke-width="2" fill="none"/><path d="M350 150 H700" class="hot flow" stroke-width="2" fill="none"/><path d="M350 50 V150" stroke="var(--fg)" stroke-dasharray="3 4"/><text font-size="34">🚢<animateMotion dur="5s" repeatCount="indefinite" path="M10 110 H320"/></text><text font-size="30">🚚<animateMotion dur="5s" repeatCount="indefinite" path="M360 140 H650"/></text><text x="350" y="40" text-anchor="middle" font-size="13">Puerto de Santa Marta</text><text x="40" y="190" font-size="12">Equipos especializados</text><text x="520" y="200" font-size="12">Carga pesada al piedemonte</text>',
+'<rect y="130" width="700" height="90" fill="var(--line)" opacity=".6"/><path d="M120 200 V60 H312" class="hot flow" stroke-width="5" fill="none"/><path d="M388 60 H580 V200" class="cold flow" stroke-width="5" fill="none"/><circle cx="350" cy="60" r="38" fill="var(--card)" stroke="var(--acc2)" stroke-width="3"/><g><path d="M350 28 V92 M318 60 H382 M327 37 L373 83 M373 37 L327 83" stroke="var(--acc2)" stroke-width="3"/><animateTransform attributeName="transform" type="rotate" from="0 350 60" to="360 350 60" dur="2.5s" repeatCount="indefinite"/></g><text x="350" y="120" text-anchor="middle" font-size="13">Generación ⚡</text><text x="130" y="170" font-size="12">Extracción</text><text x="570" y="170" text-anchor="end" font-size="12">Reinyección total</text><text x="350" y="205" text-anchor="middle" font-size="12">Sin gases al aire en operación habitual</text>',
+'<rect y="100" width="700" height="120" fill="var(--line)" opacity=".6"/><rect x="340" y="100" width="20" height="115" fill="var(--bg)"/><rect x="340" y="215" width="20" height="0" fill="var(--fg)" opacity=".55"><animate attributeName="height" values="0;115;115" keyTimes="0;.7;1" dur="4s" repeatCount="indefinite"/><animate attributeName="y" values="215;100;100" keyTimes="0;.7;1" dur="4s" repeatCount="indefinite"/></rect><text x="180" y="98" font-size="14">🌱<animate attributeName="font-size" values="12;30;30" keyTimes="0;.7;1" dur="4s" repeatCount="indefinite"/></text><text x="500" y="98" font-size="14">🌿<animate attributeName="font-size" values="12;30;30" keyTimes="0;.7;1" dur="4s" repeatCount="indefinite"/></text><text x="380" y="170" font-size="13">Sellado con cemento</text><text x="380" y="190" font-size="12">protege los acuíferos</text>'
+];
+function stage(k,m){
+  if(m&&tm)auto();
+  cur=k;
+  [].forEach.call(box.children,function(c,i){c.classList.toggle('act',i===k)});
+  det.textContent=ST[k][1];
+  document.getElementById('sc').innerHTML=SC[k];
+  document.getElementById('chips').innerHTML=CH[k].map(function(t){return '<span class="chip">'+t+'</span>'}).join('');
+  document.getElementById('pg').style.width=((k+1)*20)+'%';
+}
+function auto(){
+  var ap=document.getElementById('ap');
+  if(tm){clearInterval(tm);tm=null;ap.textContent='▶ Auto';}
+  else{tm=setInterval(function(){stage((cur+1)%5)},4500);ap.textContent='⏸ Pausa';}
+}
+[].forEach.call(box.children,function(b,k){b.onclick=function(){stage(k,1)}});
+stage(0);
+pad(0);tl(0);
+var h=parseInt((location.hash||'').replace('#s',''),10);
+go(h>=1&&h<=S.length?h-1:0);
+</script>
+</body></html>
